@@ -11,7 +11,19 @@ int RPM = 67;
 int RPM_old = 0;
 int RPM_LCD = 1005;
 
+const byte interruptPinUp = 2;
+const byte interruptPinDown =3;
+volatile unsigned long alteZeit=0, entprellZeit=300;
+int fastforwardUp = 0;
+int fastforwardDown = 0;
+
 void setup() {
+  pinMode(interruptPinUp, INPUT);
+  pinMode(interruptPinDown, INPUT);
+  digitalWrite(interruptPinUp, HIGH);
+  digitalWrite(interruptPinDown, HIGH);
+ 
+  
  // lcd.init(); 
   lcd.backlight();
   lcd.begin(16,2);
@@ -24,13 +36,20 @@ void setup() {
 }
 
 void loop() {
- RPM = map (analogRead(analogPin),0,1023,31,667);
  
-Serial.print(RPM*15); 
-Serial.print(" U/Min  ");
-Serial.print(RPM); 
-Serial.println(" Hz");
-  if ( RPM >= RPM_old + 1 || RPM <= RPM_old - 1 ){
+ 
+ Serial.print(RPM*15); 
+ Serial.print(" U/Min  ");
+ Serial.print(RPM); 
+ Serial.println(" Hz");
+ 
+if (digitalRead (interruptPinUp) == LOW ) {up();}
+else {fastforwardUp=0;}
+if (digitalRead (interruptPinDown) == LOW ) {down();}
+else {fastforwardDown=0;}
+
+ 
+  if ( RPM != RPM_old  ){
   lcd.setCursor(0,1);
   lcd.print("           U/Min");
   RPM_LCD = RPM * 15;
@@ -42,7 +61,35 @@ Serial.println(" Hz");
   lcd.print(RPM_LCD);
   RPM_old = RPM;
   }
+ 
+  //RPM = constrain (RPM,31,667);
   tone(ledPin,RPM);
-
-  
 }
+  void up() {
+  if((millis() - alteZeit) > entprellZeit || fastforwardUp > 50 ) { 
+    // innerhalb der entprellZeit nichts machen
+   if (RPM < 667){
+ RPM ++;
+ }
+    alteZeit = millis(); // letzte Schaltzeit merken      
+  }
+ else {
+  fastforwardUp ++ ;
+ }
+ }
+ 
+
+
+ void down() {
+  if((millis() - alteZeit) > entprellZeit || fastforwardDown > 50) { 
+    // innerhalb der entprellZeit nichts machen
+   if (RPM > 31){
+ RPM --  ;  
+  }
+    alteZeit = millis(); // letzte Schaltzeit merken      
+  }
+  else {
+  fastforwardDown ++ ;
+ }
+}
+
