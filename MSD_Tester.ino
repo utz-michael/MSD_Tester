@@ -72,6 +72,7 @@ else {fastforwardDown=0;}
  RPM ++;
  }
  if (RPM < 657 && fastforwardUp > 50){
+ //RPM ++;
  RPM ++;
   }
     alteZeit = millis(); // letzte Schaltzeit merken      
@@ -90,6 +91,7 @@ else {fastforwardDown=0;}
  RPM --  ;  
   }
     if (RPM > 41 && fastforwardDown > 50){
+// RPM --  ; 
  RPM --  ;   
   }
     alteZeit = millis(); // letzte Schaltzeit merken      
