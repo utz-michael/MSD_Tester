@@ -67,10 +67,13 @@ else {fastforwardDown=0;}
 }
   void up() {
   if((millis() - alteZeit) > entprellZeit || fastforwardUp > 50 ) { 
-    // innerhalb der entprellZeit nichts machen
+    
    if (RPM < 667){
  RPM ++;
  }
+ if (RPM < 657 && fastforwardUp > 50){
+ RPM ++;
+  }
     alteZeit = millis(); // letzte Schaltzeit merken      
   }
  else {
@@ -82,9 +85,12 @@ else {fastforwardDown=0;}
 
  void down() {
   if((millis() - alteZeit) > entprellZeit || fastforwardDown > 50) { 
-    // innerhalb der entprellZeit nichts machen
+    
    if (RPM > 31){
  RPM --  ;  
+  }
+    if (RPM > 41 && fastforwardDown > 50){
+ RPM --  ;   
   }
     alteZeit = millis(); // letzte Schaltzeit merken      
   }
