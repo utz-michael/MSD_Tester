@@ -10,6 +10,8 @@ unsigned long previousmicros = 0;        // will store last time LED was updated
 long interval = 1;           // interval at which to blink (milliseconds)
 long RPM = 1000; 
 long RPM_old = 0;
+int analog = 0;
+int analog_old = 0;
 void setup() {
   lcd.begin(16,2);
   pinMode(ledPin, OUTPUT);
@@ -20,10 +22,16 @@ void setup() {
 }
 
 void loop() {
-  RPM = analogRead(analogPin)*10;
+  //RPM = analogRead(analogPin)*10;
+  analog = constrain (analogRead(analogPin),1,1000);
+  if ( analog >= analog_old + 10 || analog <= analog_old - 10 ){
+    RPM = analog * 10;
   interval =1000000.0/(RPM * 0.2);
+  analog_old = analog;
+  }
+  
 
-  if ( RPM >= RPM_old + 21 || RPM <= RPM_old - 21 ){
+  if ( RPM >= RPM_old + 99 || RPM <= RPM_old - 99 ){
   lcd.setCursor(0,1);
   lcd.print("           U/Min");
   if (0 <= RPM && RPM <= 9){lcd.setCursor(8,1);}
