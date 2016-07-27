@@ -2,9 +2,9 @@
 #include <Wire.h>  
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  // Set the LCD I2C address
- //LiquidCrystal_I2C lcd(0x27,16,2);
+ 
 int analogPin = 0;
-const int ledPin =  13;      // the number of the LED pin
+const int ledPin =  4;      // the number of the LED pin
 
 
 int RPM = 67; 
